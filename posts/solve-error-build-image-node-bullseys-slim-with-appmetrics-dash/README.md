@@ -1,5 +1,27 @@
-# Solve build image docker with appmetrics-dash failed on node bullseys-slim:18.xx
+# Solve error build image node bullseys-slim with appmetrics-dash
 
+### version 
+node:18.10-bullseye-slim
+
+# Dockerfile
+```
+FROM node:18.10-bullseye-slim
+
+WORKDIR /app
+
+RUN apt-get update \
+  && apt-get install -y g++ gcc-9 make python \
+  && apt-get clean
+
+RUN npm install node-gyp -g
+
+COPY --chown=node:node ./package*.json ./
+RUN npm ci --only=production
+.
+.
+```
+
+# Problem
 Found error **omr-agentcore/libhcmqtt.so** while build the image docker Error, I couldn't install package on docker node bullseys-slim:18.10
 
 e.g. snippet error
@@ -22,37 +44,8 @@ e.g. snippet error
 23.80 npm ERR! /root/.npm/_logs/2024-05-15T04_50_37_854Z-debug-0.log
 ```
 
-e.g my dockerfile
-```
-FROM node:18.10-bullseye-slim
-
-WORKDIR /app
-
-RUN apt-get update \
-  && apt-get install -y g++ gcc-9 make python \
-  && apt-get clean
-
-ENV CC=/usr/bin/gcc-9
-
-RUN npm install node-gyp -g
-
-COPY --chown=node:node ./package*.json ./
-RUN npm ci --only=production
-.
-.
-```
-
-Solved By Change Environment variable CC
+# Solution
+Solve by adding an environment variable on dockerfile
 ```
 CC=/usr/bin/gcc-9
-```
-
-e.g Code snippet put appmetrics-dash
-
-```
-//must config at top level of node excute
-
-import { CONTEXT_PATH, globalOptionSequelize } from './common/constant';
-
-require('appmetrics-dash').attach({ url: `${CONTEXT_PATH}/monitoring`, nodereport: null });
 ```
