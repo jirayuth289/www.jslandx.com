@@ -2,9 +2,9 @@
 
 # Retry
 Retrying when errors, there are many types of support e.g.
-- ConnectionError
-- ValidationError
-- ConnectionTimeOutError
+* ConnectionError
+* ValidationError
+* ConnectionTimeOutError
 
 Also, support retry
 Add the retry option there are 2 ways
