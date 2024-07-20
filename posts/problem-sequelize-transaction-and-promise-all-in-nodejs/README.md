@@ -1,33 +1,40 @@
 # problem-sequelize-transaction-and-promise-all-in-nodejs
+I found a strange bug about the database transaction rollback on my nodejs project in the production, It is critical problem becuase it change data in database inconsistent.
 
-# Problem
-
-I found the error transaction rollback on my project in the production.
-
-I use sequelize transaction that automatically passes transactions to all queries with Promise.all() node typescript.
+I use sequelize transaction that automatically passes transactions to all queries with Promise.all() method.
 
 I searched, and I think the cause will be.
 
-**Transaction has been rejected and rollback complete, but some delay query still commit partially**
+# Problem
 
-Because sequelize concurrent transactions with Promise.all can work incorrect because of Promise.all() behavior (doesn't wait all promise results).
+Promise.all() method behavior execute concurrent if there is any of the promises in the given iterable rejects, it catches the first reject and it won't stop other promises.
 
 ```
-await Promise.all(tenDbTxns);
+import cls = from 'cls-hooked';
+import { Sequelize } = from 'sequelize';
 
-// 5/10 fulfilled first query task to complete
-// 6 rejected ---> sequelize rollback 6/10
-// 4/10 pending and after fulfilled will be committed to database (slow query)
+const namespace = cls.createNamespace('my-very-own-namespace');
+
+Sequelize.useCLS(namespace);
+
+const sequelize = new Sequelize(config); //use a pool connection
+
+await sequelize.transaction(async (t) => {
+    await Promise.all(tenQueryPromises); //all query has been paased a transaction by use CLS
+});
 ```
 
-Commit will happen if you use a pool connection. In the example, you rollback the changes in the connection and then release the connection back to the pool(6/10). (thinking this connection is now clean) BUT, your delay promises will still use it.
+In the above example, assume the result order of each promise following
 
-So the result of execution will occur commit partiallly at 5/10 fulfilled, 4/10 and other your delay promises will still use it
+- 5/10 fulfilled first query task to complete
+- 6 rejected sequelize rollback 6/10
+- 4/10 and other/10 pending and after fulfilled will be committed to database (slow query)
 
-And Promise.all() execute as concurrent if there is any reject, it catches the first reject. It won't roll back anything probably cuase next task query still execute without stop other promises
+So sequelize rollback transactions can work incorrect
 
- #### Other cuase
-By default, Sequelize might call CLS.clear after the transaction finishes (commit or rollback).
+**Transaction has been rejected and rollback complete, but some query still commit partially** Becuse Promise.all() doesn't wait all promise results and my sequelize config use a pool connection, In the example, the rollback (6/10) the changes in the connection and then release the connection back to the pool, the other promises that may delay or first complete will commit partiallly becuase connection that these promise query don't use transactions
+
+And by default, Sequelize might call CLS.clear after the transaction finishes (commit or rollback).
 
 # Solution
 
@@ -73,6 +80,7 @@ try {
 } catch(error) {
     await connection.rollback();
 }
+
 Problem:
 Using this code we expect the following behavior: when one query fails, transaction rolls back and data should stay consistent. But this code will lead you to one strange bug: when one query fails, other queries roll back partially (e.g. 6 of 10 queries roll back, but other ones modifiy data so database becomes inconsistent)
 
