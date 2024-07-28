@@ -1,67 +1,68 @@
 # problem-sequelize-transaction-and-promise-all-in-nodejs
 I found a strange bug about the database transaction rollback on my nodejs project in the production, It is critical problem becuase it change data in database inconsistent.
 
-I use sequelize transaction that automatically passes transactions to all queries with Promise.all() method.
-
-I searched, and I think the cause will be.
+I use a sequelize transaction that automatically passes transactions to all queries with Promise.all method.
 
 # Problem
+**Transaction has been rejected and rollback complete, but some query still commit partially**
 
-Promise.all() method behavior execute concurrent if there is any of the promises in the given iterable rejects, it catches the first reject and it won't stop other promises.
+Because Promise.all method behavior execute concurrent if there is any of the promises in the given iterable rejects, it catches the first reject.
 
 ```
-import cls = from 'cls-hooked';
-import { Sequelize } = from 'sequelize';
-
-const namespace = cls.createNamespace('my-very-own-namespace');
-
-Sequelize.useCLS(namespace);
-
-const sequelize = new Sequelize(config); //use a pool connection
+const tenItems = Array(10).fill(null).map((v, i) => ({
+    id: i,
+    itemName: 'Item' + i
+}));
 
 await sequelize.transaction(async (t) => {
-    await Promise.all(tenQueryPromises); //all query has been paased a transaction by use CLS
+    await Promise.all(tenItems.map(update)); //all query has been paased a transaction by use CLS
 });
+
+async function update(date) {
+    ...
+    await sequelize.query('UPDATE', data);
+}
 ```
 
-In the above example, assume the result order of each promise following
+In the above example, assume the completion order of each promise following
 
-- 5/10 fulfilled first query task to complete
-- 6 rejected sequelize rollback 6/10
-- 4/10 and other/10 pending and after fulfilled will be committed to database (slow query)
+- 1-5/10 fulfilled &nbsp;&nbsp; : first query task to complete
+- 6/10 rejected &nbsp;&nbsp;&nbsp;&nbsp; : transaction rollback
+- 7-10/10 pending&nbsp;: and after fulfilled will be committed to database
 
-So sequelize rollback transactions can work incorrect
+In the scenario, Promise.all is rejected at 6/10 and 1-5 rollback and a transaction released by default sequelize might call CLS.clear after the transaction finishes (commit or rollback).
 
-**Transaction has been rejected and rollback complete, but some query still commit partially** Becuse Promise.all() doesn't wait all promise results and my sequelize config use a pool connection, In the example, the rollback (6/10) the changes in the connection and then release the connection back to the pool, the other promises that may delay or first complete will commit partiallly becuase connection that these promise query don't use transactions
-
-And by default, Sequelize might call CLS.clear after the transaction finishes (commit or rollback).
+but the promise task 7-10 (delay) still queries the database, these promise task execute without transaction and when it fulfilled, it modify database inconsistent
 
 # Solution
 
-1. sequential query execution:
+The approach to solve the problem following
+
+1. sequential query execution
 
 ```
-const data = [];
-for (const tx of tenDbTxns) {
-    const res = await tx;
-
-    data.push(tx);
-}
-```
-
-2. concurent execution but with Promise.allSettled (waits all promise results):
-
-```
-const settled = await Promise.allSettled(tenDbTxns);
-const data = [];
-for (const res of settled) {
-    if (res.status === 'rejected') {
-        throw res.reason;
+await sequelize.transaction(async (t) => {
+    for (const tx of tenDbTxns) {
+        const res = await tx;
     }
-
-    data.push(res.value);
-}
+});
 ```
+we have to wait on each one of these Promises to return before the next one can start.
+
+2. concurent execution with Promise.allSettled()
+
+```
+await sequelize.transaction(async (t) => {
+    const settled = await Promise.allSettled(tenDbTxns);
+    const errors = settled.filter(res => res.status === 'rejected)
+    if (errors.length) throw errors.map(res => res.reason);
+});
+```
+In above example, it use the promise concurrency method like Promise.all(), but it waits a response of every promise and we can handle rejection and throw the error manual to rollback the transaction
+
+It take speed up better the first approach.
+
+finalllay, two approach help passing a transaction in sequelize automatically can make rollback correctly.
 
 ---------Transactions and promises in Node.js---------
 
@@ -124,6 +125,7 @@ Queries queued to execution;
 One query failed;
 Transaction rolled back;
 Some slow queries executed after transaction rollback.
+
 Solutions:
 Thanks to the Chad Elliott for it: As of NodeJS@12.10.0 you can use Promise.allSettled(). This will not only wait for all promises to complete, but will give you an array with the result of each promise. Just iterate through the results and verify that none have a status of ‘rejected’.
 Not the best solution but it works: do not use Promise.all() inside transctions, use sequential query execution.
