@@ -13,6 +13,7 @@ npm i @cyclonedx/cdxgen
 ```
 
 3. use command
+<br/><br/>
 ```
 cdxgen -o bom.json
 ```
