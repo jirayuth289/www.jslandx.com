@@ -1,6 +1,6 @@
 # Profile
 
-![Jirayuth Singngam](/pages/profile/jirayuth-profile-196-px.png "San Juan Mountains")
+![Jirayuth Singngam](/pages/profile/jirayuth-profile-196-px.png)
 
 My name is **Jirayuth Singngam** (Art) as software engineer
 
