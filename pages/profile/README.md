@@ -9,13 +9,13 @@ Nov 1994 Born in Thailand
 Woking as Full Stack Developer since 2017 
 
 Strength: **Node.js/React** <br>
-
+<br>
 # Education 🎓
 Bachelor Degree at Computer Science, Ubon Ratchathani University
 
 🇹🇭 Native <br>
 🇬🇧 Basic <br>
-
+<br>
 # Experienced Platform
 🌐 Backend              &emsp;&emsp;&emsp;&emsp;&emsp;⭐⭐⭐⭐⭐ <br>
 🌐 Frontend             &emsp;&emsp;&emsp;&emsp;&emsp;⭐⭐⭐ <br>
@@ -69,7 +69,7 @@ Bachelor Degree at Computer Science, Ubon Ratchathani University
 # Award
 2011 <br>
 2017 - UBU Startup Thailand <br>
-
+<br>
 # Timeline of Life
 2017 - 2021 &nbsp;&emsp;&emsp;&emsp; Co-founder & Full Stack Developer at Apptify Co., Ltd<br>
 2022 - 2023 &emsp;&emsp;&emsp; Software Engineer at London Stock Exchange Group <br>
