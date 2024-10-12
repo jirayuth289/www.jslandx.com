@@ -100,6 +100,8 @@ Bachelor Degree at Computer Science, Ubon Ratchathani University
 2012 - รางวัลชนะเลิศ เหรียญทอง การแข่งขันทักษะทางคอมพิวเตอร์ ม.ปลาย <br>
 2017 - UBU Startup Thailand <br>
 
+<br>
+
 # Course
 2020 - Best Pratice Secured Coding for Developer at Software park Thailand <br>
 2023 - Computer Architecture by 9Arm
