@@ -23,9 +23,9 @@ Bachelor Degree at Computer Science, Ubon Ratchathani University
 <br>
 
 # Experienced Platform
-🌐 Backend              &emsp;&emsp;&emsp;&emsp;&emsp;⭐⭐⭐⭐⭐ <br>
-🌐 Frontend             &emsp;&emsp;&emsp;&emsp;&emsp;⭐⭐⭐⭐ <br>
-📱 Cross Platform         &nbsp;&emsp;&emsp;⭐⭐ <br>
+🌐 Backend              &emsp;&emsp;&emsp;⭐⭐⭐⭐⭐ <br>
+🌐 Frontend             &emsp;&emsp;&emsp;⭐⭐⭐⭐ <br>
+📱 Cross Platform         &nbsp;⭐⭐ <br>
 
 <br>
 
@@ -49,32 +49,34 @@ Bachelor Degree at Computer Science, Ubon Ratchathani University
 * React Native
 * Express
 * PM2
-* Sequlize
+* Sequelize ORM
 * Redux
 * Docker
 * Mysql
 * MSSQL Server
 * Oracle
-* S3
-* Ant design
-* Digital Ocean
-* RabbitMq
-* SQS
-* SNS
-* Sendgrid
-* GB Prime Pay
-* Omise
-* AWS AppSync
-* Lambda
-* DynamoDb
-* Cloud function
-* Version Control - Gitlab, Github, Codecommit
-* Gitlab CI
-* Jenkins pipeline
-* Firebase
 * MongoDB
 * PostgreSQL
 * Redis
+* Ant design
+* Digital Ocean
+* RabbitMq
+* SendGrid
+* AWS ECR
+* AWS S3
+* AWS SNS
+* AWS AppSync
+* AWS DynamoDB
+* AWS Lambda
+* Jenkins Pineline
+* Gitlab CI
+* Firebase
+* Cloud function
+* Gitlab
+* Github
+* Codecommit
+* GB Prime Pay
+* Omise
 * Socket.io
 * Laravel
 * Angular 1
@@ -89,6 +91,7 @@ Bachelor Degree at Computer Science, Ubon Ratchathani University
 
 # Sotf Skill
 * Writer
+* Agile
 
 <br>
 
@@ -104,7 +107,7 @@ Bachelor Degree at Computer Science, Ubon Ratchathani University
 <br>
 
 # Timeline of Life
-2017 - 2021 &nbsp;&emsp;&emsp;&emsp; Co-founder & Full Stack Developer at Apptify Co., Ltd<br>
-2022 - 2023 &emsp;&emsp;&emsp; Software Engineer at London Stock Exchange Group <br>
-2023 - 2024 &emsp;&emsp;&emsp; Senior Software Engineer at Gosoft <br>
-2024 - Now  &nbsp;&emsp;&emsp;&emsp; Tech & Life Style Blogger at jslandx.com <br>
+2017 - 2021 &nbsp;&emsp; Co-founder & Full Stack Developer at Apptify Co., Ltd<br>
+2022 - 2023 &emsp; Software Engineer at London Stock Exchange Group <br>
+2023 - 2024 &emsp; Senior Software Engineer at Gosoft <br>
+2024 - Now  &nbsp;&emsp; Tech & Life Style Blogger at jslandx.com <br>
