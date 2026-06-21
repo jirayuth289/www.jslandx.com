@@ -1,7 +1,7 @@
-# Stress Test Nodejs With JMeter
+# Stress Test Node.js With JMeter
 
-test concurrent
+Topics covered:
 
-race condition
-
-consuming pub/sub
+- Concurrent load testing
+- Race conditions
+- Consuming pub/sub

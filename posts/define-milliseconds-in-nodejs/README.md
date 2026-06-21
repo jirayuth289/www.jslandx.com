@@ -1,4 +1,4 @@
-# Define num of milliseconds in nodejs
-1. ms package
-<br/>
-2. 10_000 = 10/s
+# Define Number of Milliseconds in Node.js
+
+- **ms package** — human-readable time strings (e.g. `'2 days'`, `'1h'`)
+- **Numeric separators** — `10_000` equals 10 seconds in milliseconds

@@ -1,9 +1,13 @@
-# Solve error build image node bullseys-slim with appmetrics-dash
+# Solve Error Building Node Bullseye-Slim Image with appmetrics-dash
 
-### version 
-node:18.10-bullseye-slim
+### Version
 
-# Dockerfile
+`node:18.10-bullseye-slim`
+
+---
+
+## Dockerfile
+
 ```
 FROM node:18.10-bullseye-slim
 
@@ -17,14 +21,16 @@ RUN npm install node-gyp -g
 
 COPY --chown=node:node ./package*.json ./
 RUN npm ci --only=production
-.
-.
 ```
 
-# Problem
-Found error **omr-agentcore/libhcmqtt.so** while build the image docker Error, I couldn't install package on docker node bullseys-slim:18.10
+---
 
-e.g. snippet error
+## Problem
+
+Found error **omr-agentcore/libhcmqtt.so** while building the Docker image. I could not install the package on `node:18.10-bullseye-slim`.
+
+Example error snippet:
+
 ```
 23.80 npm ERR! collect2: error: ld returned 1 exit status
 23.80 npm ERR! make: *** [omr-agentcore/hcmqtt.target.mk:180: Release/obj.target/omr-agentcore/libhcmqtt.so] Error 1
@@ -44,8 +50,12 @@ e.g. snippet error
 23.80 npm ERR! /root/.npm/_logs/2024-05-15T04_50_37_854Z-debug-0.log
 ```
 
-# Solution
-Solve by adding an environment variable on dockerfile
+---
+
+## Solution
+
+Add an environment variable in the Dockerfile:
+
 ```
-CC=/usr/bin/gcc-9
+ENV CC=/usr/bin/gcc-9
 ```
